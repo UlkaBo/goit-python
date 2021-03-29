@@ -1,35 +1,35 @@
-num = input("input a number ")
+operand = input("input a operandr ")
 while True:
     try:
-        num = float(num)
+        operand = float(operand)
         break
     except:
-        num = input("try to input a number ")
-rez = num
-op = input("input a operand ")
+        operand = input("try to input a operand ")
+result = operand
+operator = input("input a operator ")
 while True:
-    if op in '/*+-':
+    if operator in '/*+-':
         break
     else:
-        op = input("try to input a operand ")
+        operator = input("try to input a operator ")
 
-while op != '=':
-    num = input("input a number ")
+while operator != '=':
+    operand = input("input a operand ")
     while True:
         try:
-            num = float(num)
-            rez = eval(str(rez) + op + str(num))
+            operand = float(operand)
+            result = eval(str(result) + operator + str(operand))
             break
         except ValueError:
-            num = input("try to input a number ")
+            operand = input("try to input a operand ")
         except ZeroDivisionError:
-            num = input("Division by ziro. Try to input a another number ")
+            operand = input("Division by ziro. Try to input a another operand ")
 
-    op = input("input a operand ")
+    operator = input("input a operator ")
     while True:
-        if op in '/*+-=':
+        if operator in '/*+-=':
             break
         else:
-            op = input("try to input a operand ")
+            operator = input("try to input a operator ")
 
-print(rez)
+print(result)
