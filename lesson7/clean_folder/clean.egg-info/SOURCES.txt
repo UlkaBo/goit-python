@@ -1,0 +1,9 @@
+setup.py
+clean.egg-info/PKG-INFO
+clean.egg-info/SOURCES.txt
+clean.egg-info/dependency_links.txt
+clean.egg-info/entry_points.txt
+clean.egg-info/not-zip-safe
+clean.egg-info/top_level.txt
+clean_folder/__init__.py
+clean_folder/clean.py
