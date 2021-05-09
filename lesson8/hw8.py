@@ -27,23 +27,23 @@ def congratulate(us):
 
     now = datetime.datetime.today()
 
-    # порядковый номер следующей недели
+    # порядковый номер текущей недели
 
-    next_week = now.isocalendar()[1]+1
+    now_week = now.isocalendar()[1]
 
     # выбираю людей у которых дата рождения с измененным годом на текущий год
-    # приходится на высчитанную неделю next_week
+    # приходится на высчитанную неделю now_week
     # беру только имя и название дня недели
 
-    users_next_week = [{'name': el['name'],
-                        'day': el['birthday'].replace(now.year).strftime('%A')}
-                       for el in us
-                       if el['birthday'].replace(now.year).isocalendar()[1] == next_week]
+    users_now_week = [{'name': el['name'],
+                       'day': el['birthday'].replace(now.year).strftime('%A')}
+                      for el in us
+                      if el['birthday'].replace(now.year).isocalendar()[1] == now_week]
 
     # словарь с ключом - название дня недели, и значением  - списком имен
 
     dct_lst = defaultdict(list)
-    for eд in users_next_week:
+    for eд in users_now_week:
         dct_lst[el['day']].append(el['name'])
 
     # субботу и воскресенье переношу в понедельник
