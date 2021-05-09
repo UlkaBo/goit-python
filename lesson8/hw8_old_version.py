@@ -23,39 +23,38 @@ users = [{'name': 'Bob', 'birthday': datetime.datetime(1990, 5, 10)},
 
 
 def congratulate(us):
+    # дата сегодня
 
     now = datetime.datetime.today()
 
-    #  количество дней назад была суббота
+    # порядковый номер текущей недели
 
-    delta_back = datetime.timedelta(now.weekday()+2)
+    now_week = now.isocalendar()[1]
 
-    # список дат с последней субботы до пятницы этой недели
+    # выбираю людей у которых дата рождения с измененным годом на текущий год
+    # приходится на высчитанную неделю now_week
+    # беру только имя и название дня недели
 
-    lst_days = [now - delta_back + datetime.timedelta(i) for i in range(7)]
+    users_now_week = [{'name': el['name'],
+                       'day': el['birthday'].replace(now.year).strftime('%A')}
+                      for el in us
+                      if el['birthday'].replace(now.year).isocalendar()[1] == now_week]
 
-    # создаю словарь полученных дат  в виде {(месяц, день) : название дня недели, ...}
+    # словарь с ключом - название дня недели, и значением  - списком имен
 
-    dct_tpl_days = {(el.month, el.day): el.strftime('%A') for el in lst_days}
-
-    # словарь  - списки именников по дням недели. Ключ - название для недели
-
-    dct_lst_congr = defaultdict(list)
-    for el in us:
-        month_day = (el['birthday'].month, el['birthday'].day)
-        if month_day in dct_tpl_days:
-            dct_lst_congr[dct_tpl_days[month_day]].append(el['name'])
+    dct_lst = defaultdict(list)
+    for el in users_now_week:
+        dct_lst[el['day']].append(el['name'])
 
     # субботу и воскресенье переношу в понедельник
 
-    dct_lst_congr['Monday'].extend(
-        dct_lst_congr['Saturday']+dct_lst_congr['Sunday'])
-    del dct_lst_congr['Saturday'], dct_lst_congr['Sunday']
+    dct_lst['Monday'].extend(dct_lst['Saturday']+dct_lst['Sunday'])
+    del dct_lst['Saturday'], dct_lst['Sunday']
 
     # печатаю
 
-    for el in dct_lst_congr:
-        print(el+': ', ', '.join(dct_lst_congr[el]))
+    for el in dct_lst:
+        print(el+': ', *dct_lst[el])
 
 
 def main():
