@@ -3,11 +3,10 @@ def caching_fibonacci():
 
     def fibonacci(n):
 
-        for k in range(2, n+1):
-            if k not in cache:
-                cache[k] = cache[k-1] + cache[k-2]
-
-        return cache[k]
+        if n in cache:
+            return cache[n]
+        cache[n] = fibonacci(n-2) + fibonacci(n-1)
+        return cache[n]
 
         # return cache.setdefault(n, fibonacci(n-2) + fibonacci(n-1))
 
