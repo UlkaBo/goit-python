@@ -69,7 +69,7 @@ class Birthday(Field):
             date_birthday = datetime.datetime(*numbers_date).date()
 
             # и эта дата не из будущего
-            if date_birthday >= datetime.datetime.now():
+            if date_birthday >= datetime.datetime.today().date():
                 print('Date from future')
                 return
 
@@ -136,16 +136,16 @@ class Record():
         pass
 
     def days_to_birthday(self):
-        now = datetime.datetime.today()
+        now = datetime.datetime.today().date()
 
         # отдельный случай  - день рождения 29 февраля
         # чтобы избежать столкновения с 29/2  будем  брать в расчет
         # день на день позже дня рождения.
         # после всех вычислений мы  отнимем один день
-        if (self.birthday.day, self.birthday.month) == (29, 2):
-            bd = self.birthday + datetime.timedelta(day=1)
+        if (self.birthday.value.day, self.birthday.value.month) == (29, 2):
+            bd = self.birthday.value + datetime.timedelta(day=1)
         else:
-            bd = self.birthday
+            bd = self.birthday.value
 
         # получаю дату дня  рождения в этому году
         bd_that_year = bd.replace(year=now.year)
@@ -154,7 +154,7 @@ class Record():
         delta = bd_that_year - now
 
         # если она отрицательна, то значит др в этом году уже прошел
-        if delta <= 0:
+        if delta.days <= 0:
 
             # надо брать дату дня рождения следующего года
             bd_that_year = bd_that_year.replace(year=now.year+1)
@@ -162,7 +162,7 @@ class Record():
             # дельта от дня рождения в следующем году до сегодня
             delta = bd_that_year - now
 
-        if (self.birthday.day, self.birthday.month) == (29, 2):
+        if (self.birthday.value.day, self.birthday.value.month) == (29, 2):
             return delta.days - 1
         return delta.days
 
