@@ -126,14 +126,15 @@ class Record():
         now = datetime.datetime.today()
 
         # отдельный случай  - день рождения 29 февраля
-        # чтобы избежать столкновения с 29/2  будем всегда брать в расчет
+        # чтобы избежать столкновения с 29/2  будем  брать в расчет
         # день на день позже дня рождения.
         # после всех вычислений мы  отнимем один день
-
-        before_bd = self.birthday - datetime.timedelta(day=1)
-
+        if (self.birthday.day, self.birthday.month) == (29, 2):
+            bd = self.birthday + datetime.timedelta(day=1)
+        else:
+            bd = self.birthday
         # получаю дату дня  рождения в этому году
-        bd_that_year = before_bd.replace(year=now.year)
+        bd_that_year = bd.replace(year=now.year)
 
         # дельта от дня рождения до сегодня
         delta = bd_that_year - now
@@ -147,4 +148,6 @@ class Record():
             # дельта от дня рождения в следующем году до сегодня
             delta = bd_that_year - now
 
-        return delta.days - 1
+        if (self.birthday.day, self.birthday.month) == (29, 2):
+            return delta.days - 1
+        return delta.days
