@@ -30,10 +30,12 @@ class Phone(Field):
 
     @value.setter
     def value(self, new_value):
+
         # проверка данных на корректность.
         # паттерн  pattern_phone указан в начале программы
         if re.fullmatch(pattern_phone, new_value):
             self.__value = new_value
+
         else:
             print('Phone number is wrong')
 
@@ -46,20 +48,26 @@ class Birthday(Field):
 
     @value.setter
     def value(self, new_value):
+
         # предполагаю, что new_value  может быть записан с любыми разделителями
         # извлекаю оттуда только числа
         numbers_date = re.split(r'[\.,\- /:]+', new_value)
+
         # преобразую в кортеж чисел
         numbers_date = tuple(map(int, numbers_date))
+
         try:
             # если из этих чисел получается дата
             date_birthday = datetime.datetime(*numbers_date).date()
+
             # и эта дата не из будущего
             if date_birthday >= datetime.datetime.now():
                 print('Date from future')
                 return
+
             # присваиваем новое значение даты
             self.__value = date_birthday
+
         except:
             print('Date is wrong')
 
@@ -116,19 +124,27 @@ class Record():
 
     def days_to_birthday(self):
         now = datetime.datetime.today()
+
         # отдельный случай  - день рождения 29 февраля
         # чтобы избежать столкновения с 29/2  будем всегда брать в расчет
         # день на день позже дня рождения.
         # после всех вычислений мы  отнимем один день
+
         before_bd = self.birthday - datetime.timedelta(day=1)
+
         # получаю дату дня  рождения в этому году
         bd_that_year = before_bd.replace(year=now.year)
+
         # дельта от дня рождения до сегодня
         delta = bd_that_year - now
+
         # если она отрицательна, то значит др в этом году уже прошел
         if delta <= 0:
+
             # надо брать дату дня рождения следующего года
             bd_that_year = bd_that_year.replace(year=now.year+1)
+
             # дельта от дня рождения в следующем году до сегодня
             delta = bd_that_year - now
+
         return delta.days - 1
