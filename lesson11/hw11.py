@@ -7,7 +7,7 @@ pattern_phone = '\d{3,}'
 
 class Field:
     def __init__(self, value):
-        self.__value = self.value(value)
+        self.__value = value
 
     @property
     def value(self):
@@ -19,10 +19,15 @@ class Field:
 
 
 class Name(Field):
-    pass
+
+    def __init__(self, value):
+        self.value = value
 
 
 class Phone(Field):
+
+    def __init__(self, value):
+        self.value = value
 
     @property
     def value(self):
@@ -41,6 +46,9 @@ class Phone(Field):
 
 
 class Birthday(Field):
+
+    def __init__(self, value):
+        self.value = value
 
     @property
     def value(self):
@@ -77,6 +85,15 @@ class AddressBook(UserDict):
     def add_record(self, record):
         self[record.name.value] = record
 
+    def iterator(self, N):
+
+        # Количество записей, выводимых на каждой итеррации.
+        # Надеюсь этот аргумент будет передаваться именно в этот метод
+        self.N = N
+
+        new_iter = self
+        yield next(new_iter)
+
     def __next__(self):
         if self.i >= len(self):
             raise StopIteration
@@ -101,10 +118,6 @@ class AddressBook(UserDict):
     def __iter__(self, N=1):
         # внутренний счетчик, который обнуляется при каждом новом создании итератора
         self.i = 0
-
-        # Количество записей, выводимых на каждой итеррации. Не понятно как этот аргумент будет передаваться
-        self.N = N
-
         # можно ли возвращать не только self ? А, например, кусок словаря ?
         return self
 
@@ -133,6 +146,7 @@ class Record():
             bd = self.birthday + datetime.timedelta(day=1)
         else:
             bd = self.birthday
+
         # получаю дату дня  рождения в этому году
         bd_that_year = bd.replace(year=now.year)
 
@@ -151,3 +165,13 @@ class Record():
         if (self.birthday.day, self.birthday.month) == (29, 2):
             return delta.days - 1
         return delta.days
+
+
+ad_b = AddressBook()
+n = Name('Ya')
+tel = Phone('56432')
+bd = Birthday('1975-02-26')
+rec = Record(n, tel, bd)
+print(rec.days_to_birthday())
+
+input()
