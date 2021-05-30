@@ -43,12 +43,19 @@ class Phone(Field):
 
         else:
             print('Phone number is wrong')
+            self.__value = None
 
 
 class Birthday(Field):
 
     def __init__(self, value):
         self.value = value
+
+    '''
+    def __init__(self. value):
+        self.__value = 0
+        self.value = value
+    '''
 
     @property
     def value(self):
@@ -71,6 +78,7 @@ class Birthday(Field):
             # и эта дата не из будущего
             if date_birthday >= datetime.datetime.today().date():
                 print('Date from future')
+                self.__value = None
                 return
 
             # присваиваем новое значение даты
@@ -78,6 +86,7 @@ class Birthday(Field):
 
         except:
             print('Date is wrong')
+            self.__value = None
 
 
 class AddressBook(UserDict):
@@ -90,9 +99,10 @@ class AddressBook(UserDict):
         # Количество записей, выводимых на каждой итеррации.
         # Надеюсь этот аргумент будет передаваться именно в этот метод
         self.N = N
-
+        self.i = 0
         new_iter = self
-        yield next(new_iter)
+        while self.i < len(self.data): 
+            yield ''.join(str(list(next(new_iter).items())))
 
     def __next__(self):
         if self.i >= len(self):
@@ -120,13 +130,17 @@ class AddressBook(UserDict):
         self.i = 0
         # можно ли возвращать не только self ? А, например, кусок словаря ?
         return self
+    '''
+    def __str__(self):
+        return '\n'.join(list(self.data.items()))
+    '''
 
 
 class Record():
 
     def __init__(self, name, phone=[], birthday=None):
         self.name = name
-        self.phones = phone
+        self.phones = [phone]
         self.birthday = birthday
 
     def add_phone(self, phone):
@@ -143,7 +157,7 @@ class Record():
         # день на день позже дня рождения.
         # после всех вычислений мы  отнимем один день
         if (self.birthday.value.day, self.birthday.value.month) == (29, 2):
-            bd = self.birthday.value + datetime.timedelta(day=1)
+            bd = self.birthday.value + datetime.timedelta(days=1)
         else:
             bd = self.birthday.value
 
@@ -172,6 +186,38 @@ n = Name('Ya')
 tel = Phone('56432')
 bd = Birthday('1975-02-26')
 rec = Record(n, tel, bd)
-print(rec.days_to_birthday())
 
+rec.birthday = Birthday('2000-02-29')
+print(rec.days_to_birthday())
+rec.add_phone(Phone('12344535'))
+ad_b.add_record(rec)
+
+n = Name('Yaa')
+tel = Phone('5-6432')
+bd = Birthday('2001-02-29')
+rec = Record(n, tel, bd)
+ad_b.add_record(rec)
+
+n = Name('Yab')
+tel = Phone('56432')
+bd = Birthday('1975 2-262')
+rec = Record(n, tel, bd)
+ad_b.add_record(rec)
+
+n = Name('Yac')
+tel = Phone('56679898432')
+bd = Birthday('2022-02-26')
+rec = Record(n, tel, bd)
+ad_b.add_record(rec)
+
+n = Name('Yad')
+tel = Phone('56    432')
+bd = Birthday('1975/02//26')
+rec = Record(n, tel, bd)
+ad_b.add_record(rec)
+x = ad_b.iterator(2)
+y = next(x)
+print(y)
+y = next(x)
+print(y)
 input()
