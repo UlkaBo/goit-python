@@ -134,16 +134,22 @@ def phone(data):
 
 @input_error
 def show_all(data):
-    data = data.replace('show all ', '')
+    data = data.replace('show all', '')
     if len(data.split()) == 1:
-        # вызывает метод итератор из AddressBook
+        # проверка   - если параметр  N задан некорректно задаем ему 1
         try:
             N = int(data)
         except:
             N = 1
-        for el in phone_book.iterator(N):
-            print(el)
-            print('----------')
+    else:
+        # если не задан параметр N  считаем N равным длине словаря
+        N = len(phone_book.data)
+
+    # вызывает метод итератор из AddressBook
+    for el in phone_book.iterator(N):
+        print(el)
+        print('----------')
+
     # выполнить требование, чтобы все принты были в main  не получается
     # поэтому в return  идет бессмысленная строка. Щоб була...
     return 'it\'s all'

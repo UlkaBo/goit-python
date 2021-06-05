@@ -118,10 +118,22 @@ class Record():
         self.phones.append(phone)
 
     def change_phone(self, phone, new_phone):
+        #  поиск по объекту Phone  не работает, потому что   ищет вхождение,
+        '''
         try:
             idx = self.phones.index(phone)
             self.phones[idx] = new_phone
         except:
+            raise Exception("Phone is not found")
+        '''
+        # а это is . Объект созданный с теми же данными будет новым объектом
+        # Поэтому будем искать value объекта  .
+
+        for i, el in enumerate(self.phones):
+            if phone.value == el.value:
+                self.phones[i] = new_phone
+                break
+        else:
             raise Exception("Phone is not found")
 
     def change_birthday(self,  new_birthday):
@@ -190,7 +202,7 @@ class AddressBook(UserDict):
     def full_search(self, user_or_phone):
         result = ''
 
-        for rec in self.values():
+        for rec in self.data.values():
             #  сначала ищу среди имен
             if user_or_phone in rec.name.value:
                 result += str(rec)
@@ -198,9 +210,10 @@ class AddressBook(UserDict):
             # потом ищу в телефонах
             # для этого удаляю все символы кроме цифр
             dig_user_or_phone = re.sub(r'[\D]', '', user_or_phone)
-            for phone in rec.phones.value:
-                if dig_user_or_phone in phone:
-                    result += str(rec)
+            if len(dig_user_or_phone) > 3:
+                for phone in rec.phones:
+                    if dig_user_or_phone in phone.value:
+                        result += str(rec)
 
         return result
 
