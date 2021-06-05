@@ -62,11 +62,13 @@ def add_bd(data):
     # и содержит еще два "слова"  - имя  и день рождения
     # "add bd " удаляется сразу
     data = data.replace('add bd ', '')
+
     #  действительно ли там есть два "слова" ?
     if len(data.split()) == 2:
         name, birthday = data.split()
         bd = Birthday(birthday)
 
+        # если записи с таким именем нет
         if name not in phone_book:
             # добавляем в phone_book  новую запись,
             # предварительно долго и нудно ее создаем
@@ -77,24 +79,32 @@ def add_bd(data):
 
             phone_book.add_record(rec)
 
+        # если запись такая есть, но др пустое, то заполняем его
         elif phone_book[name].birthday.value == None:
             phone_book[name].change_birthday(bd)
 
+        #  если запись такая уже есть
         else:
             raise Exception("Abonent already has a birthday")
 
     else:
-        raise Exception("Give me name and phone please")
+        raise Exception("Give me name and brthday please")
 
 
 @input_error
 def change_ph(data):
-    #   изменить телефон. должна получить три слова
+    #   чтобы изменить телефон. должна получить три слова
     #   name, phone, new_phone
     data = data.replace('change ph ', '')
     if len(data.split()) == 3:
         name, phone, new_phone = data.split()
         if name in phone_book:
+            #  здесь передаю в метод объекты только потому что везде передаю в методы обекты.
+            #  Хотя здесь лучше бы передавать строки . Все-равно внутри метода
+            #  мне нужно вытащить строки. И можно было бы заменить в существующем объекте Phone
+            #  существующее поле value. Но я же уже передала объект, поэтому буду там в записи
+            #  менять объект Phone.
+            #  вобщем криво. Мне нравится. Как правильно ?
             phone_book[name].change_phone(Phone(phone), Phone(new_phone))
         else:
             raise Exception("User is not found")
@@ -115,12 +125,12 @@ def change_bd(data):
         else:
             raise Exception("User is not found")
     else:
-        raise Exception("Give me name and phone please")
+        raise Exception("Give me name and birthday, please")
 
 
 @input_error
 def phone(data):
-    # метод поиска записи  по  имени
+    # простая функция поиска записи  по  имени, то есть по ключу
     data = data.replace('phone ', '')
     if len(data.split()) == 1:
         name = data
@@ -157,9 +167,10 @@ def show_all(data):
 
 @input_error
 def find(data):
-    #  метод поиск записей по части имени или части телефона
+    #  функция поиска записей по части имени или части телефона
     data = data.replace('find ', '')
     if len(data.split()) == 1:
+        # вызывается метод класса AddressBook
         result = phone_book.full_search(data)
         return result
 

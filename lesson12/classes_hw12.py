@@ -205,15 +205,16 @@ class AddressBook(UserDict):
         for rec in self.data.values():
             #  сначала ищу среди имен
             if user_or_phone in rec.name.value:
-                result += str(rec)
+                result += '\n' + str(rec)
 
             # потом ищу в телефонах
             # для этого удаляю все символы кроме цифр
             dig_user_or_phone = re.sub(r'[\D]', '', user_or_phone)
+            #  если там есть хотя бы 4 цифры, будем считать это частью телефона
             if len(dig_user_or_phone) > 3:
                 for phone in rec.phones:
                     if dig_user_or_phone in phone.value:
-                        result += str(rec)
+                        result += '\n' + str(rec)
 
         return result
 
@@ -270,44 +271,4 @@ class AddressBook(UserDict):
 
 
 if __name__ == "__main__":
-
-    ad_b = AddressBook()
-    n = Name('Ya')
-    tel = Phone('56432')
-    bd = Birthday('1975-02-26')
-    rec = Record(n, tel, bd)
-
-    rec.birthday = Birthday('2000-02-29')
-    print(rec.days_to_birthday())
-    rec.add_phone(Phone('12344535'))
-    ad_b.add_record(rec)
-
-    n = Name('Yaa')
-    tel = Phone('5-6432')
-    bd = Birthday('2001-02-29')
-    rec = Record(n, tel, bd)
-    ad_b.add_record(rec)
-
-    n = Name('Yab')
-    tel = Phone('56432')
-    bd = Birthday('1975 2-262')
-    rec = Record(n, tel, bd)
-    ad_b.add_record(rec)
-
-    n = Name('Yac')
-    tel = Phone('56679898432')
-    bd = Birthday('2022-02-26')
-    rec = Record(n, tel, bd)
-    ad_b.add_record(rec)
-
-    n = Name('Yad')
-    tel = Phone('56    432')
-    bd = Birthday('1975/02//26')
-    rec = Record(n, tel, bd)
-    ad_b.add_record(rec)
-    x = ad_b.iterator(2)
-    y = next(x)
-    print(y)
-    y = next(x)
-    print(y)
-    input()
+    pass
